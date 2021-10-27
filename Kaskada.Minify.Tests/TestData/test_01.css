@@ -1,0 +1,40 @@
+﻿body {
+    margin-left: 10px;
+    margin-right: 30px;
+    /*margin-top: 5px*/
+}
+
+/*.navbar { background-color:#8cc449;}*/
+.navbar-brand {
+    background-color: #f3ac21;
+}
+
+div > p #top {
+    margin-top: 60px;
+}
+
+.nav-tabs > li > a {
+    background-color: #4e4e4e;
+}
+
+.panel-default > .panel-heading {
+    background-color: #212020;
+}
+
+@media screen and ( min-width: 900px )
+{
+    #top {
+        color: #4e4e4e;
+        font-weight: bold;
+    }
+}
+
+
+
+.main .article {
+    background: none repeat scroll 0 0 #c4c54a;
+    border-top: 1px solid red;
+    float: left;
+    width: 75px; /* small width */
+}
+
