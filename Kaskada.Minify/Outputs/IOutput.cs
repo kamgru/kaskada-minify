@@ -6,4 +6,6 @@ public interface IOutput
         char value);
 
     void Commit();
+
+    char? Peek();
 }

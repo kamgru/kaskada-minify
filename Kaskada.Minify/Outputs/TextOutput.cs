@@ -13,6 +13,8 @@ public sealed class TextOutput : IOutput
     public void Commit() =>
         _text = string.Join("", _output);
 
+    public char? Peek() => _output.Last();
+
     public override string ToString() =>
         _text;
 }

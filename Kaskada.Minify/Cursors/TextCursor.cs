@@ -15,7 +15,6 @@ internal sealed class TextCursor : ICursor
 
     public bool HasMoreInput { get; private set; } = true;
 
-
     public void Dispose() =>
         _text = string.Empty;
 
