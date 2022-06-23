@@ -6,7 +6,7 @@ public sealed class TextOutput : IOutput
 
     private string _text = string.Empty;
 
-    public void Push(
+    public void Append(
         char value) =>
         _output.Add(value);
 

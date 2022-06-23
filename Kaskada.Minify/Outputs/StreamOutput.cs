@@ -9,7 +9,7 @@ public sealed class StreamOutput : IOutput, IDisposable
         Stream stream) =>
         _streamWriter = new StreamWriter(stream);
 
-    public void Push(
+    public void Append(
         char value)
     {
         _streamWriter.Write(value);

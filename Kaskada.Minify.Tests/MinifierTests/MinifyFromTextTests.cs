@@ -90,6 +90,12 @@ namespace Kaskada.Minify.Tests.MinifierTests
                 "@media screen and (min-width:900px){p{color:red}}@import \"common.css\" screen;");
 
         [Fact]
+        public void Minify_ShouldRemoveNewLinesInAtRulesSelectors() =>
+            AssertResultAsExpected(
+                "@media screen and ( min-width: 900px ){\n  p { color: red; } } @import \"common.css\" screen;",
+                "@media screen and (min-width:900px){p{color:red}}@import \"common.css\" screen;");
+
+        [Fact]
         public void Minify_ShouldRemoveLastSemicolonInBlock() =>
             AssertResultAsExpected(
                 "body { color: red; padding: 10px; }",

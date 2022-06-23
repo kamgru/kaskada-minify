@@ -2,7 +2,7 @@
 
 public interface IOutput
 {
-    void Push(
+    void Append(
         char value);
 
     void Commit();
