@@ -86,8 +86,14 @@ namespace Kaskada.Minify.Tests.MinifierTests
         [Fact]
         public void Minify_ShouldNotRemoveWhitespaceInAtRules() =>
             AssertResultAsExpected(
-                "@media screen and ( min-width: 900px; ){ p { color: red; } } @import \"common.css\" screen;",
-                "@media screen and (min-width:900px;){p{color:red}}@import \"common.css\" screen;");
+                "@media screen and ( min-width: 900px ){ p { color: red; } } @import \"common.css\" screen;",
+                "@media screen and (min-width:900px){p{color:red}}@import \"common.css\" screen;");
+
+        [Fact]
+        public void Minify_ShouldRemoveNewLinesInAtRulesSelectors() =>
+            AssertResultAsExpected(
+                "@media screen and ( min-width: 900px ){\n  p { color: red; } } @import \"common.css\" screen;",
+                "@media screen and (min-width:900px){p{color:red}}@import \"common.css\" screen;");
 
         [Fact]
         public void Minify_ShouldRemoveLastSemicolonInBlock() =>
@@ -97,9 +103,21 @@ namespace Kaskada.Minify.Tests.MinifierTests
 
         [Fact]
         public void Minify_ShouldNotRemoveSemicolonInAtRule() =>
+        AssertResultAsExpected(
+            "@import url('file.css'); @import url('file.css') screen and (orientation: landscape);",
+            "@import url('file.css');@import url('file.css')screen and (orientation:landscape);");
+
+        [Fact]
+        public void Minify_ShouldNotRemoveWhitespaceBetweenParenthesisAndClassSelector() =>
             AssertResultAsExpected(
-                "@import url('file.css'); @import url('file.css') screen and (orientation: landscape);",
-                "@import url('file.css');@import url('file.css')screen and (orientation:landscape);");
+                ".foo:not(:hover) .bar {}",
+                ".foo:not(:hover) .bar{}");
+
+        [Fact]
+        public void Minify_ShouldRemoveWhitespaceBetweenSelectorAndDeclaration() =>
+            AssertResultAsExpected(
+                ".main .article { background: none repeat scroll 0 0 #c4c54a; }",
+                ".main .article{background:none repeat scroll 0 0 #c4c54a}");
 
         private void AssertResultAsExpected(
             string input,
@@ -111,7 +129,9 @@ namespace Kaskada.Minify.Tests.MinifierTests
             minifier.Minify(textOutput);
             string actual = textOutput.ToString();
 
-            Assert.Equal(expected, actual);
+            Assert.Equal(
+                expected,
+                actual);
         }
     }
 }

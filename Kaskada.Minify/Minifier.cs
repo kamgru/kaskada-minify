@@ -1,25 +1,19 @@
 ﻿global using Kaskada.Minify.Cursors;
 global using Kaskada.Minify.Outputs;
+using Kaskada.Minify.States;
 
 namespace Kaskada.Minify;
 
 public sealed class Minifier : IDisposable
 {
     private readonly ICursor _cursor;
+    private readonly StateMachine _stateMachine;
 
-    private bool _hasSemicolonInBuffer;
-
-    private static readonly HashSet<char> PreDelimiters = new()
+    private Minifier(ICursor cursor)
     {
-        '[', '{', ':', ';', '=', '!', '&', '|', '?', '+', '-', '~', '*', '/', '\n', '>', ',', '@', ')'
-    };
-
-    private static readonly HashSet<char> PostDelimiters = new()
-    {
-        '(', '[', '{', ':', ';', '=', '!', '&', '|', '?', '+', '-', '~', '*', '/', '\n', '>', ',', '@', ')', '}'
-    };
-
-    private Minifier(ICursor cursor) => _cursor = cursor;
+        _cursor = cursor;
+        _stateMachine = new StateMachine();
+    }
 
     public static Minifier FromFile(string filename) => new(new FileCursor(filename));
 
@@ -29,86 +23,12 @@ public sealed class Minifier : IDisposable
 
     public void Minify(IOutput output)
     {
+        _stateMachine.PushState<WhitespaceState>();
         while (_cursor.HasMoreInput)
         {
+            _stateMachine.Process(_cursor, output);
             _cursor.MoveNext();
-
-            if (_cursor.Current == '/' && _cursor.Peek() == '*')
-            {
-                while (_cursor.HasMoreInput)
-                {
-                    _cursor.MoveNext();
-
-                    if (_cursor.Current == '*' && _cursor.Peek() == '/')
-                    {
-                        _cursor.MoveNext();
-                        _cursor.MoveNext();
-
-                        break;
-                    }
-                }
-            }
-
-            if (!_cursor.HasMoreInput)
-            {
-                break;
-            }
-
-            if (_cursor.Current is '\n')
-            {
-                continue;
-            }
-
-            if (char.IsWhiteSpace(_cursor.Current))
-            {
-                char? next = _cursor.Peek();
-
-                if (next is null)
-                {
-                    continue;
-                }
-
-                if (char.IsWhiteSpace(_cursor.Previous) || char.IsWhiteSpace(next.Value))
-                {
-                    continue;
-                }
-
-                if (IsPostDelimiter(_cursor.Previous) || IsPreDelimiter(next.Value))
-                {
-                    continue;
-                }
-            }
-
-            if (_cursor.Current is ';')
-            {
-                _hasSemicolonInBuffer = true;
-                continue;
-            }
-
-            if (_hasSemicolonInBuffer)
-            {
-                if (_cursor.Current is not '}')
-                {
-                    output.Push(';');
-                }
-
-                _hasSemicolonInBuffer = false;
-            }
-
-            output.Push(_cursor.Current);
         }
-
-        if (_hasSemicolonInBuffer)
-        {
-            output.Push(';');
-        }
-
         output.Commit();
     }
-
-    private static bool IsPreDelimiter(char value) =>
-        PreDelimiters.Contains(value);
-
-    private static bool IsPostDelimiter(char value) =>
-        PostDelimiters.Contains(value);
 }
