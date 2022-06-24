@@ -1,17 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <Title>Kaskada Minify</Title>
-    <PackageId>Kaskada.Minify</PackageId>
-    <Version>1.0.7</Version>
-    <Authors>Kamil Grudzień</Authors>
-    <Company>Kamil Grudzień</Company>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>CSS minifier</Description>
-    <RepositoryUrl>https://github.com/kamgru/kaskada-minify</RepositoryUrl>
-  </PropertyGroup>
-  
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Title>Kaskada Minify</Title>
+        <PackageId>Kaskada.Minify</PackageId>
+        <Version>1.1.3</Version>
+        <Authors>Kamil Grudzień</Authors>
+        <Company>Kamil Grudzień</Company>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Description>CSS minifier</Description>
+        <RepositoryUrl>https://github.com/kamgru/kaskada-minify</RepositoryUrl>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
 </Project>
